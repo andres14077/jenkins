@@ -1,0 +1,28 @@
+version: '3.9'
+
+services:
+  jenkins-container:
+    build:
+      context: .
+    restart: always
+    user: jenkins:137        #stat -c '%g' /var/run/docker.sock
+    privileged: true
+    ports:
+      - 8080:8080
+      - 50000:50000
+    volumes:
+      - jenkins_vol:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
+  sonarqube:
+    image: sonarqube:community
+    volumes:
+      - sonarqube_data:/opt/sonarqube/data
+      - sonarqube_extensions:/opt/sonarqube/extensions
+      - sonarqube_logs:/opt/sonarqube/logs
+    ports:
+      - "9000:9000"
+volumes:
+  jenkins_vol:
+  sonarqube_data:
+  sonarqube_extensions:
+  sonarqube_logs:
